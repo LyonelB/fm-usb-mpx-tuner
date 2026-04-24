@@ -201,7 +201,7 @@
       <text x="250" y="48" text-anchor="middle" fill="#26de81" font-size="8">3,3 V</text>
 
       <!-- === TLV9062 buffer MPX === -->
-      <g class="block" data-component="tlv" data-name="TLV9062" data-desc="Op-amp rail-to-rail, GBW 10 MHz. Adapte le signal MPX du TEF6687 (~300 mVrms) à ~1 Vpp sur charge 75 Ω. Gain non-inverseur ≈ 3,3." data-mpn="U4 — TLV9062IDCK SOT-23-8">
+      <g class="block" data-component="tlv" data-name="TLV9062" data-desc="Op-amp rail-to-rail, GBW 10 MHz. Adapte le signal MPX du TEF6687 (~300 mVrms) à ~1 Vrms line-level. Gain non-inverseur ≈ 3,3. Couplage AC (10 µF) + série 100 Ω. Sortie RCA phono." data-mpn="U4 — TLV9062IDCK SOT-23-8">
         <rect x="340" y="190" width="100" height="80" rx="8" fill="#2a2a1a" stroke="#f7b731" stroke-width="2"/>
         <text x="390" y="215" text-anchor="middle" fill="#f7b731" font-size="11" font-weight="700">TLV9062</text>
         <text x="390" y="230" text-anchor="middle" fill="#8892a4" font-size="8">Buffer MPX</text>
@@ -210,24 +210,30 @@
         <text x="390" y="265" text-anchor="middle" fill="#f7b731" font-size="8">U4</text>
       </g>
 
-      <!-- MPX: TLV9062 → BNC output -->
-      <line x1="340" y1="230" x2="260" y2="230" stroke="#f7b731" stroke-width="2.5"/>
-      <!-- Wait, this goes left... let me redo -->
+      <!-- MPX OUT from TLV → RCA -->
+      <line x1="390" y1="270" x2="390" y2="355" stroke="#f7b731" stroke-width="2.5"/>
+      <text x="408" y="318" fill="#f7b731" font-size="8">MPX ~1 Vrms</text>
 
-      <!-- MPX OUT from TLV → BNC -->
-      <line x1="440" y1="230" x2="490" y2="350" stroke="#f7b731" stroke-width="2.5"/>
-
-      <!-- Actually let me simplify the layout. BNC below TLV -->
-      <!-- === BNC MPX output === -->
-      <g class="block" data-component="bnc" data-name="Sortie MPX — BNC" data-desc="Signal composite FM : pilote 19 kHz, L+R, L−R DSB-SC, RDS 57 kHz. Niveau ~1 Vpp sur 75 Ω. Compatible encodeurs RDS et analyseurs de spectre broadcast." data-mpn="J3 — BNC femelle 75Ω">
-        <rect x="340" y="390" width="100" height="55" rx="6" fill="#2a1a0a" stroke="#f7b731" stroke-width="1.5"/>
-        <text x="390" y="412" text-anchor="middle" fill="#f7b731" font-size="10" font-weight="600">BNC</text>
-        <text x="390" y="427" text-anchor="middle" fill="#8892a4" font-size="8">MPX out ~1 Vpp</text>
-        <text x="390" y="440" text-anchor="middle" fill="#8892a4" font-size="7">J3 — 75 Ω</text>
+      <!-- === RCA MPX output === -->
+      <g class="block" data-component="rca" data-name="Sortie MPX — RCA (phono)" data-desc="Signal composite FM : pilote 19 kHz, L+R, L−R DSB-SC, RDS 57 kHz. Niveau ~1 Vrms line-level. Connexion : câble RCA→jack 3,5 mm TS (mono) vers line-in HiFiBerry DAC+ ADC (PCM1863). Canal gauche (Tip) = MPX." data-mpn="J3 — RCA femelle Cliff CL1384">
+        <rect x="335" y="355" width="110" height="60" rx="6" fill="#2a1a0a" stroke="#f7b731" stroke-width="1.5"/>
+        <text x="390" y="375" text-anchor="middle" fill="#f7b731" font-size="10" font-weight="600">RCA — MPX</text>
+        <text x="390" y="390" text-anchor="middle" fill="#8892a4" font-size="8">~1 Vrms line-level</text>
+        <text x="390" y="403" text-anchor="middle" fill="#8892a4" font-size="7">→ HiFiBerry line-in</text>
+        <text x="390" y="411" text-anchor="middle" fill="#f7b731" font-size="7">J3</text>
       </g>
-      <!-- Wire TLV → BNC -->
-      <line x1="390" y1="270" x2="390" y2="390" stroke="#f7b731" stroke-width="2.5"/>
-      <text x="405" y="335" fill="#f7b731" font-size="8">MPX ~1Vpp</text>
+
+      <!-- HiFiBerry target block -->
+      <g class="block" data-component="hifi" data-name="HiFiBerry DAC+ ADC" data-desc="HAT Raspberry Pi. ADC PCM1863 24 bits sur l'entrée line-in jack 3,5 mm. Reçoit le MPX composite pour analyse logicielle : spectre, déviation ±75 kHz, pilote 19 kHz, décodage RDS, mesure MPX loudness." data-mpn="Connexion via câble RCA→jack 3,5 mm TS mono">
+        <rect x="220" y="355" width="105" height="60" rx="6" fill="#1a1a3a" stroke="#a29bfe" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="272" y="374" text-anchor="middle" fill="#a29bfe" font-size="9" font-weight="600">HiFiBerry</text>
+        <text x="272" y="387" text-anchor="middle" fill="#a29bfe" font-size="8">DAC+ ADC</text>
+        <text x="272" y="400" text-anchor="middle" fill="#8892a4" font-size="7">PCM1863 — line-in</text>
+        <text x="272" y="411" text-anchor="middle" fill="#8892a4" font-size="7">fm-monitor (RPi)</text>
+      </g>
+      <!-- Cable RCA → HiFiBerry (dashed = câble externe) -->
+      <line x1="335" y1="385" x2="325" y2="385" stroke="#f7b731" stroke-width="2" stroke-dasharray="5,3"/>
+      <text x="278" y="348" text-anchor="middle" fill="#f7b731" font-size="7" opacity="0.8">câble RCA→jack TS</text>
 
       <!-- === PCM5102A DAC === -->
       <g class="block" data-component="pcm" data-name="PCM5102A" data-desc="DAC I²S stéréo 32 bits. SNR 112 dB (A-weighted), THD+N −93 dB. Mode hardware (pas d'interface de contrôle). Sortie 2,1 Vrms @ pleine échelle." data-mpn="U3 — PCM5102APWR TSSOP-20">

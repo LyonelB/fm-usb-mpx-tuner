@@ -7,7 +7,7 @@ Tuner FM USB autonome avec sortie MPX composite et sortie audio stéréo démodu
 Ce projet est un récepteur FM alimenté par USB, conçu pour les applications broadcast et monitoring.  
 Il expose deux sorties simultanées :
 
-- **MPX** — signal composite FM brut (19 kHz pilote, L+R, L−R DSB-SC, RDS) sur BNC/SMA, pour alimenter un encoder RDS ou un analyseur de spectre.
+- **MPX** — signal composite FM brut (19 kHz pilote, L+R, L−R DSB-SC, RDS) sur RCA (phono), pour alimenter un ADC type HiFiBerry DAC+ ADC ou un analyseur FM broadcast.
 - **Audio stéréo** — L/R démodulés et convertis en analogique via un DAC I²S haute qualité, sur jack 3,5 mm TRS.
 
 Le tout tient dans un boîtier Hammond extrudé **1455L1201** (120 × 55 × 30 mm).
@@ -31,8 +31,8 @@ Antenne FM
 └──────┬──────┘               └────────┬─────────┘
        │                               │
        ▼                               ▼
-   BNC/SMA out                  Jack 3,5 mm stéréo
-  (MPX ~1 Vpp)                  (audio L/R)
+   RCA (phono)                  Jack 3,5 mm stéréo
+  (MPX ~1 Vrms)                 (audio L/R)
 ```
 
 ## Composants principaux
@@ -47,7 +47,7 @@ Antenne FM
 | X1 | 8 MHz crystal | Horloge STM32 |
 | J1 | USB Type-C | Alimentation + données USB 2.0 FS |
 | J2 | SMA femelle | Entrée antenne 50 Ω |
-| J3 | BNC femelle | Sortie MPX (~1 Vpp / 75 Ω) |
+| J3 | RCA femelle | Sortie MPX (~1 Vrms line-level, couplage AC) |
 | J4 | Jack 3,5 mm TRS | Sortie audio stéréo |
 | — | Hammond 1455L1201 | Boîtier extrudé aluminium 120×55×30 mm |
 
@@ -78,7 +78,8 @@ fm-usb-mpx-tuner/
 ### Matériel requis
 - Câble USB-C
 - Antenne FM 50 Ω (dipôle, fouet ou SMA→MCX)
-- Récepteur MPX ou jack audio
+- ADC line-in (ex. HiFiBerry DAC+ ADC) via câble RCA→jack 3,5 mm pour analyse FM
+- Ou jack audio 3,5 mm pour écoute démodulée
 
 ### Firmware
 ```bash

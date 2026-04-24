@@ -78,10 +78,30 @@ Les broches `SCK/BCK/LRCK/DIN` sont câblées directement sur le bus I²S du STM
 
 Le signal MPX brut du TEF6687 (~300 mVrms) est adapté par un TLV9062 :
 
-- Configuration : amplificateur non-inverseur, gain ≈ 3,3 → ~1 Vpp sur charge 75 Ω
-- Bande passante : > 100 kHz (suffisant pour couvrir RDS à 57 kHz + harmoniques)
+- Configuration : amplificateur non-inverseur, gain ≈ 3,3 → **~1 Vrms** sur charge haute impédance
+- Bande passante : > 100 kHz (couvre RDS à 57 kHz et ses harmoniques)
 - Alimentation rail-to-rail 3,3 V
-- Sortie sur connecteur BNC/SMA 75 Ω
+- Couplage AC obligatoire (condensateur 10 µF) — le TEF6687 peut présenter un offset DC
+- Résistance série 100 Ω en sortie : protège l'op-amp contre la capacité du câble RCA
+- Sortie sur connecteur **RCA femelle** (phono), impédance source < 200 Ω
+
+### Connexion vers HiFiBerry DAC+ ADC
+
+```
+fm-usb-mpx-tuner          câble RCA→jack 3,5 mm       Raspberry Pi
+  J3 RCA (MPX) ────────────────────────────────► HiFiBerry line-in
+                                                  (PCM1863 ADC, 24 bit)
+                                                        │
+                                                        ▼
+                                               logiciel fm-monitor
+                                               (analyse spectre MPX,
+                                                mesure RDS, pilote 19 kHz,
+                                                deviation ±75 kHz)
+```
+
+**Niveau de signal :** ~1 Vrms (−3 dBu) — dans la plage nominale du PCM1863 (entrée max ±1 Vrms en mode line).  
+**Câble à utiliser :** RCA mâle → jack 3,5 mm TS (mono) — le MPX est un signal composite mono.  
+**Attention :** utiliser l'entrée **gauche** (Tip) du jack HiFiBerry ; le canal droit peut rester non connecté ou être câblé sur le même signal (Tip = Ring).
 
 ---
 
@@ -120,4 +140,4 @@ PCB cible : 112 × 48 mm (panneaux d'extrémité Hammond : 57 × 31 mm).
 
 Perçages panneaux :
 - **Panneau gauche** : USB-C (9,5 × 3,5 mm), LED ø3 mm
-- **Panneau droit** : SMA antenne, BNC MPX, jack 3,5 mm audio
+- **Panneau droit** : SMA antenne, RCA MPX, jack 3,5 mm audio
