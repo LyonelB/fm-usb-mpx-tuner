@@ -1,0 +1,25 @@
+Reference,Value,Description,Package,Qty,Manufacturer,MPN,LCSC,Mouser,Unit Price EUR
+U1,TEF6687 V205,Tuner FM/AM Silicon Labs module ou IC,QFN-32 / module,1,NXP / module aftermarket,TEF6687HN/V205,—,—,~8.00
+U2,STM32F072CBT6,MCU ARM Cortex-M0 48 MHz USB FS,LQFP-48,1,STMicroelectronics,STM32F072CBT6,C81720,581-STM32F072CBT6,~3.50
+U3,PCM5102A,DAC I2S stéréo 32-bit 112 dB SNR,TSSOP-20,1,Texas Instruments,PCM5102APWR,C9768,595-PCM5102APWR,~2.80
+U4,TLV9062,Op-amp rail-to-rail 10 MHz GBW,SOT-23-8,1,Texas Instruments,TLV9062IDCK,C132345,595-TLV9062IDCKT,~0.60
+U5,AMS1117-3.3,LDO 3.3 V 1 A,SOT-223,1,Advanced Monolithic Systems,AMS1117-3.3,C6186,522-AMS1117-3.3,~0.20
+X1,8 MHz,Crystal SMD 8 MHz 20 ppm,3225 (3.2×2.5 mm),1,Abracon,ABM3-8.000MHZ-D2Y-T,C16152,815-ABM38.000MHZ-D2Y,~0.40
+J1,USB-C,Connecteur USB Type-C femelle SMD,USB-C Mid-Mount,1,HRO,TYPE-C-31-M-12,C165948,—,~0.30
+J2,SMA-F,Connecteur SMA femelle 50 Ω PCB edge,SMA Edge Mount,1,Amphenol,901-10511,C77963,523-901-10511,~1.20
+J3,BNC-F,Connecteur BNC femelle 75 Ω PCB edge,BNC Edge Mount,1,Amphenol,31-221-RFX,—,523-31-221-RFX,~2.00
+J4,AUDIO-3.5,Jack 3.5 mm TRS stéréo SMD,PJ-320A,1,CUI Devices,SJ-3523-SMT-TR,C91855,490-SJ-3523-SMT,~0.50
+C1–C4,100 nF,Découplage céramique X5R 3.3 V,0402,4,YAGEO,CC0402KRX5R8BB104,—,—,~0.02
+C5–C8,10 µF,Filtrage alim. céramique X5R 6.3 V,0805,4,SAMSUNG,CL21A106KOQNNNE,C15850,—,~0.10
+C9–C10,22 pF,Charge crystal,0402,2,YAGEO,CC0402JRNPO9BN220,—,—,~0.02
+C11–C12,47 µF,Bulk alim. électrochimique 10 V,SMD D6.3,2,Panasonic,EEE-1AA470P,—,667-EEE1AA470P,~0.30
+R1–R4,10 kΩ,Pull-up I2C / GPIO,0402,4,YAGEO,RC0402FR-0710KL,—,—,~0.02
+R5–R6,33 Ω,Série USB D+/D-,0402,2,YAGEO,RC0402FR-0733RL,—,—,~0.02
+R7,75 Ω,Charge sortie MPX BNC,0402,1,YAGEO,RC0402FR-0775RL,—,—,~0.02
+R8–R9,10 kΩ,Diviseur gain TLV9062,0402,2,YAGEO,RC0402FR-0710KL,—,—,~0.02
+R10,22 kΩ,Résistance gain TLV9062,0402,1,YAGEO,RC0402FR-0722KL,—,—,~0.02
+L1,600 Ω @ 100 MHz,Ferrite bead alim. analogique,0402,1,MURATA,BLM15AG601SN1D,C1015,—,~0.10
+LED1,LED rouge,LED statut 3 mm ou 0402 SMD,3mm / 0402,1,Kingbright,APT3216EC,—,—,~0.10
+—,Hammond 1455L1201,Boîtier extrudé aluminium 120×55×30 mm,—,1,Hammond Mfg,1455L1201,—,546-1455L1201,~8.50
+—,PCB,Double couche FR4 1.6 mm 112×48 mm,—,1,JLCPCB / PCBWay,—,—,—,~5.00
+,,,,,,,,Total estimé EUR,~34.00

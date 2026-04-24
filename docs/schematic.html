@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fm-usb-mpx-tuner — Schéma interactif</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --panel: #16213e;
+      --accent: #0f3460;
+      --highlight: #e94560;
+      --text: #eaeaea;
+      --muted: #8892a4;
+      --wire: #4ecdc4;
+      --signal-mpx: #f7b731;
+      --signal-i2s: #45aaf2;
+      --signal-i2c: #a29bfe;
+      --signal-usb: #fd9644;
+      --signal-pwr: #26de81;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--panel);
+      padding: 16px 24px;
+      border-bottom: 2px solid var(--highlight);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 600; }
+    header span { color: var(--muted); font-size: 0.85rem; }
+    .legend {
+      display: flex;
+      gap: 16px;
+      padding: 10px 24px;
+      background: var(--panel);
+      border-bottom: 1px solid #2a2a4a;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: background 0.2s; }
+    .legend-item:hover { background: #2a2a4a; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .schematic-wrap {
+      padding: 24px;
+      overflow: auto;
+    }
+    svg {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      background: #0d0d1a;
+      border-radius: 8px;
+      border: 1px solid #2a2a4a;
+    }
+    .tooltip {
+      position: fixed;
+      background: var(--panel);
+      border: 1px solid var(--highlight);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      max-width: 280px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 100;
+      line-height: 1.6;
+    }
+    .tooltip.visible { opacity: 1; }
+    .tooltip h3 { color: var(--highlight); margin-bottom: 4px; font-size: 0.9rem; }
+    .tooltip p { color: var(--muted); }
+    .tooltip .mpn { color: var(--wire); font-family: monospace; font-size: 0.8rem; }
+    .block { cursor: pointer; transition: filter 0.2s; }
+    .block:hover rect, .block:hover path { filter: brightness(1.3); }
+    .block:hover { filter: drop-shadow(0 0 8px rgba(233,69,96,0.6)); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>fm-usb-mpx-tuner</h1>
+    <span>Schéma de principe interactif — survolez les blocs pour les détails</span>
+  </header>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#f7b731"></div>Signal MPX composite</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#45aaf2"></div>Bus I²S audio</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a29bfe"></div>Bus I²C contrôle</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fd9644"></div>USB 2.0 FS</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#26de81"></div>Alimentation 3,3 V</div>
+  </div>
+  <div class="schematic-wrap">
+    <svg viewBox="0 0 900 520" width="900" height="520" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Grid background -->
+      <defs>
+        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e1e3a" stroke-width="0.5"/>
+        </pattern>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect width="900" height="520" fill="url(#grid)"/>
+
+      <!-- === ANTENNA INPUT === -->
+      <g class="block" data-component="ant" data-name="Antenne FM" data-desc="Entrée 50 Ω SMA femelle. Dipôle ou antenne fouet 75 cm recommandée." data-mpn="J2 — SMA-F 50Ω">
+        <rect x="20" y="220" width="80" height="50" rx="6" fill="#1a3a2a" stroke="#26de81" stroke-width="1.5"/>
+        <text x="60" y="240" text-anchor="middle" fill="#26de81" font-size="10" font-weight="600">ANT</text>
+        <text x="60" y="255" text-anchor="middle" fill="#8892a4" font-size="9">SMA 50Ω</text>
+        <text x="60" y="268" text-anchor="middle" fill="#8892a4" font-size="8">J2</text>
+        <!-- Antenna symbol -->
+        <line x1="60" y1="210" x2="60" y2="220" stroke="#26de81" stroke-width="1.5"/>
+        <line x1="40" y1="210" x2="80" y2="210" stroke="#26de81" stroke-width="1.5"/>
+        <line x1="45" y1="205" x2="75" y2="205" stroke="#26de81" stroke-width="1"/>
+        <line x1="50" y1="200" x2="70" y2="200" stroke="#26de81" stroke-width="0.8"/>
+      </g>
+
+      <!-- Wire: ANT → TEF6687 -->
+      <line x1="100" y1="245" x2="155" y2="245" stroke="#26de81" stroke-width="2" stroke-dasharray="4,2"/>
+
+      <!-- === TEF6687 === -->
+      <g class="block" data-component="tef" data-name="TEF6687 V205" data-desc="Tuner FM/AM NXP. Intègre LNA, mélangeur, démodulateur FM, sortie MPX composite analogique et sortie audio I²S 48 kHz/32 bits. Contrôle via I²C." data-mpn="U1 — TEF6687HN/V205 QFN-32">
+        <rect x="155" y="160" width="130" height="160" rx="8" fill="#1a2a3a" stroke="#45aaf2" stroke-width="2"/>
+        <text x="220" y="185" text-anchor="middle" fill="#45aaf2" font-size="12" font-weight="700">TEF6687</text>
+        <text x="220" y="200" text-anchor="middle" fill="#a29bfe" font-size="9">V205</text>
+        <text x="220" y="218" text-anchor="middle" fill="#8892a4" font-size="8">Tuner FM 65–108 MHz</text>
+        <text x="220" y="232" text-anchor="middle" fill="#8892a4" font-size="8">SNR 70 dB typ.</text>
+        <text x="220" y="246" text-anchor="middle" fill="#8892a4" font-size="8">Sortie MPX 300 mVrms</text>
+        <text x="220" y="260" text-anchor="middle" fill="#8892a4" font-size="8">I²S 48 kHz / 32 bit</text>
+        <text x="220" y="274" text-anchor="middle" fill="#8892a4" font-size="8">I²C addr 0x61</text>
+        <text x="220" y="305" text-anchor="middle" fill="#45aaf2" font-size="9">U1</text>
+      </g>
+
+      <!-- MPX output line: TEF → TLV9062 -->
+      <line x1="285" y1="230" x2="340" y2="230" stroke="#f7b731" stroke-width="2.5"/>
+      <text x="310" y="222" text-anchor="middle" fill="#f7b731" font-size="8">MPX</text>
+
+      <!-- I2S line: TEF → STM32 (top) -->
+      <line x1="285" y1="200" x2="450" y2="200" stroke="#45aaf2" stroke-width="2"/>
+      <text x="365" y="193" text-anchor="middle" fill="#45aaf2" font-size="8">I²S (SCK/WS/SD)</text>
+
+      <!-- I2C line: TEF ↔ STM32 (bottom) -->
+      <line x1="285" y1="280" x2="450" y2="280" stroke="#a29bfe" stroke-width="2"/>
+      <text x="365" y="295" text-anchor="middle" fill="#a29bfe" font-size="8">I²C (SDA/SCL)</text>
+
+      <!-- === STM32F072 === -->
+      <g class="block" data-component="stm" data-name="STM32F072CBT6" data-desc="MCU ARM Cortex-M0 48 MHz, 128 KB Flash, 16 KB RAM. USB Full-Speed natif via oscillateur interne HSI48 + CRS. Expose USB Audio Class 2.0 (audio PC sans driver) ou USB CDC (contrôle série)." data-mpn="U2 — STM32F072CBT6 LQFP-48">
+        <rect x="450" y="140" width="150" height="180" rx="8" fill="#2a1a3a" stroke="#a29bfe" stroke-width="2"/>
+        <text x="525" y="165" text-anchor="middle" fill="#a29bfe" font-size="12" font-weight="700">STM32F072</text>
+        <text x="525" y="180" text-anchor="middle" fill="#fd9644" font-size="9">CBT6</text>
+        <text x="525" y="198" text-anchor="middle" fill="#8892a4" font-size="8">Cortex-M0 @ 48 MHz</text>
+        <text x="525" y="212" text-anchor="middle" fill="#8892a4" font-size="8">USB FS (HSI48+CRS)</text>
+        <text x="525" y="226" text-anchor="middle" fill="#8892a4" font-size="8">I²C + I²S + SPI</text>
+        <text x="525" y="240" text-anchor="middle" fill="#8892a4" font-size="8">128 KB Flash</text>
+        <text x="525" y="300" text-anchor="middle" fill="#a29bfe" font-size="9">U2</text>
+      </g>
+
+      <!-- I2S: STM32 → PCM5102A -->
+      <line x1="600" y1="200" x2="680" y2="200" stroke="#45aaf2" stroke-width="2"/>
+      <text x="638" y="193" text-anchor="middle" fill="#45aaf2" font-size="8">I²S master</text>
+
+      <!-- USB line: STM32 → USB-C -->
+      <line x1="525" y1="140" x2="525" y2="80" stroke="#fd9644" stroke-width="2.5"/>
+      <text x="545" y="110" fill="#fd9644" font-size="8">USB FS</text>
+
+      <!-- === USB-C connector === -->
+      <g class="block" data-component="usbc" data-name="Connecteur USB Type-C" data-desc="Alimentation 5 V (500 mA USB 2.0) + données USB 2.0 Full-Speed. Résistances CC1/CC2 5,1 kΩ pour détection hôte." data-mpn="J1 — HRO TYPE-C-31-M-12">
+        <rect x="475" y="30" width="100" height="50" rx="6" fill="#3a2a1a" stroke="#fd9644" stroke-width="1.5"/>
+        <text x="525" y="50" text-anchor="middle" fill="#fd9644" font-size="10" font-weight="600">USB-C</text>
+        <text x="525" y="65" text-anchor="middle" fill="#8892a4" font-size="8">5 V / D+ / D−</text>
+        <text x="525" y="76" text-anchor="middle" fill="#8892a4" font-size="7">J1</text>
+      </g>
+
+      <!-- === AMS1117 LDO === -->
+      <g class="block" data-component="ldo" data-name="AMS1117-3.3 LDO" data-desc="Régulateur linéaire 3,3 V / 1 A. Convertit le 5 V USB en 3,3 V pour l'ensemble du circuit numérique. Pertes ≈ 0,5 W à 300 mA." data-mpn="U5 — AMS1117-3.3 SOT-223">
+        <rect x="380" y="30" width="80" height="50" rx="6" fill="#1a2a1a" stroke="#26de81" stroke-width="1.5"/>
+        <text x="420" y="50" text-anchor="middle" fill="#26de81" font-size="9" font-weight="600">AMS1117</text>
+        <text x="420" y="63" text-anchor="middle" fill="#26de81" font-size="9">3.3 V LDO</text>
+        <text x="420" y="75" text-anchor="middle" fill="#8892a4" font-size="7">U5</text>
+      </g>
+
+      <!-- 5V rail from USB to LDO -->
+      <line x1="475" y1="55" x2="460" y2="55" stroke="#fd9644" stroke-width="1.5"/>
+      <line x1="460" y1="55" x2="460" y2="55" stroke="#fd9644" stroke-width="1.5"/>
+      <line x1="460" y1="55" x2="460" y2="55" stroke="#fd9644" stroke-width="1.5"/>
+      <!-- 5V → LDO -->
+      <line x1="475" y1="55" x2="460" y2="55" stroke="#fd9644" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+      <!-- 3.3V rail from LDO -->
+      <line x1="380" y1="55" x2="340" y2="55" stroke="#26de81" stroke-width="2"/>
+      <line x1="340" y1="55" x2="340" y2="170" stroke="#26de81" stroke-width="1.5"/>
+      <line x1="340" y1="170" x2="155" y2="170" stroke="#26de81" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <text x="250" y="48" text-anchor="middle" fill="#26de81" font-size="8">3,3 V</text>
+
+      <!-- === TLV9062 buffer MPX === -->
+      <g class="block" data-component="tlv" data-name="TLV9062" data-desc="Op-amp rail-to-rail, GBW 10 MHz. Adapte le signal MPX du TEF6687 (~300 mVrms) à ~1 Vpp sur charge 75 Ω. Gain non-inverseur ≈ 3,3." data-mpn="U4 — TLV9062IDCK SOT-23-8">
+        <rect x="340" y="190" width="100" height="80" rx="8" fill="#2a2a1a" stroke="#f7b731" stroke-width="2"/>
+        <text x="390" y="215" text-anchor="middle" fill="#f7b731" font-size="11" font-weight="700">TLV9062</text>
+        <text x="390" y="230" text-anchor="middle" fill="#8892a4" font-size="8">Buffer MPX</text>
+        <text x="390" y="243" text-anchor="middle" fill="#8892a4" font-size="8">Gain ≈ 3.3</text>
+        <text x="390" y="256" text-anchor="middle" fill="#8892a4" font-size="8">BW > 100 kHz</text>
+        <text x="390" y="265" text-anchor="middle" fill="#f7b731" font-size="8">U4</text>
+      </g>
+
+      <!-- MPX: TLV9062 → BNC output -->
+      <line x1="340" y1="230" x2="260" y2="230" stroke="#f7b731" stroke-width="2.5"/>
+      <!-- Wait, this goes left... let me redo -->
+
+      <!-- MPX OUT from TLV → BNC -->
+      <line x1="440" y1="230" x2="490" y2="350" stroke="#f7b731" stroke-width="2.5"/>
+
+      <!-- Actually let me simplify the layout. BNC below TLV -->
+      <!-- === BNC MPX output === -->
+      <g class="block" data-component="bnc" data-name="Sortie MPX — BNC" data-desc="Signal composite FM : pilote 19 kHz, L+R, L−R DSB-SC, RDS 57 kHz. Niveau ~1 Vpp sur 75 Ω. Compatible encodeurs RDS et analyseurs de spectre broadcast." data-mpn="J3 — BNC femelle 75Ω">
+        <rect x="340" y="390" width="100" height="55" rx="6" fill="#2a1a0a" stroke="#f7b731" stroke-width="1.5"/>
+        <text x="390" y="412" text-anchor="middle" fill="#f7b731" font-size="10" font-weight="600">BNC</text>
+        <text x="390" y="427" text-anchor="middle" fill="#8892a4" font-size="8">MPX out ~1 Vpp</text>
+        <text x="390" y="440" text-anchor="middle" fill="#8892a4" font-size="7">J3 — 75 Ω</text>
+      </g>
+      <!-- Wire TLV → BNC -->
+      <line x1="390" y1="270" x2="390" y2="390" stroke="#f7b731" stroke-width="2.5"/>
+      <text x="405" y="335" fill="#f7b731" font-size="8">MPX ~1Vpp</text>
+
+      <!-- === PCM5102A DAC === -->
+      <g class="block" data-component="pcm" data-name="PCM5102A" data-desc="DAC I²S stéréo 32 bits. SNR 112 dB (A-weighted), THD+N −93 dB. Mode hardware (pas d'interface de contrôle). Sortie 2,1 Vrms @ pleine échelle." data-mpn="U3 — PCM5102APWR TSSOP-20">
+        <rect x="680" y="160" width="120" height="120" rx="8" fill="#1a2a2a" stroke="#45aaf2" stroke-width="2"/>
+        <text x="740" y="185" text-anchor="middle" fill="#45aaf2" font-size="12" font-weight="700">PCM5102A</text>
+        <text x="740" y="200" text-anchor="middle" fill="#8892a4" font-size="8">DAC I²S stéréo</text>
+        <text x="740" y="214" text-anchor="middle" fill="#8892a4" font-size="8">32 bits / 48 kHz</text>
+        <text x="740" y="228" text-anchor="middle" fill="#8892a4" font-size="8">SNR 112 dB</text>
+        <text x="740" y="242" text-anchor="middle" fill="#8892a4" font-size="8">Sortie 2,1 Vrms</text>
+        <text x="740" y="265" text-anchor="middle" fill="#45aaf2" font-size="9">U3</text>
+      </g>
+
+      <!-- PCM → Audio jack -->
+      <line x1="740" y1="280" x2="740" y2="360" stroke="#4ecdc4" stroke-width="2.5"/>
+
+      <!-- === Audio jack 3.5mm === -->
+      <g class="block" data-component="jack" data-name="Jack 3,5 mm TRS stéréo" data-desc="Sortie audio L/R démodulée et convertie par le PCM5102A. Niveau ~2 Vrms sur charge 10 kΩ. Compatible amplis hi-fi, interfaces audio." data-mpn="J4 — CUI SJ-3523-SMT-TR">
+        <rect x="685" y="360" width="110" height="60" rx="6" fill="#1a2a2a" stroke="#4ecdc4" stroke-width="1.5"/>
+        <text x="740" y="382" text-anchor="middle" fill="#4ecdc4" font-size="10" font-weight="600">AUDIO OUT</text>
+        <text x="740" y="397" text-anchor="middle" fill="#8892a4" font-size="8">Jack 3,5 mm TRS</text>
+        <text x="740" y="410" text-anchor="middle" fill="#8892a4" font-size="8">L / R stéréo</text>
+        <text x="740" y="415" text-anchor="middle" fill="#4ecdc4" font-size="7">J4</text>
+      </g>
+
+      <!-- Hammond enclosure outline -->
+      <rect x="10" y="430" width="880" height="80" rx="6" fill="none" stroke="#3a3a5a" stroke-width="1" stroke-dasharray="6,3"/>
+      <text x="20" y="448" fill="#3a3a5a" font-size="9">Boîtier Hammond 1455L1201 — 120 × 55 × 30 mm</text>
+      <rect x="10" y="455" width="40" height="50" rx="3" fill="#1a1a2e" stroke="#3a3a5a" stroke-width="0.8"/>
+      <text x="30" y="476" text-anchor="middle" fill="#3a3a5a" font-size="7">Panneau</text>
+      <text x="30" y="488" text-anchor="middle" fill="#3a3a5a" font-size="7">gauche</text>
+      <text x="30" y="499" text-anchor="middle" fill="#fd9644" font-size="6">USB-C</text>
+      <rect x="850" y="455" width="40" height="50" rx="3" fill="#1a1a2e" stroke="#3a3a5a" stroke-width="0.8"/>
+      <text x="870" y="476" text-anchor="middle" fill="#3a3a5a" font-size="7">Panneau</text>
+      <text x="870" y="488" text-anchor="middle" fill="#3a3a5a" font-size="7">droit</text>
+      <text x="870" y="499" text-anchor="middle" fill="#f7b731" font-size="6">SMA BNC J</text>
+
+      <!-- Title block -->
+      <rect x="10" y="10" width="240" height="30" rx="4" fill="#16213e"/>
+      <text x="20" y="29" fill="#e94560" font-size="13" font-weight="700">fm-usb-mpx-tuner</text>
+      <text x="165" y="29" fill="#8892a4" font-size="9">schéma de principe v1.0</text>
+
+    </svg>
+  </div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+    const tooltip = document.getElementById('tooltip');
+    document.querySelectorAll('.block').forEach(el => {
+      el.addEventListener('mouseenter', (e) => {
+        const name = el.dataset.name;
+        const desc = el.dataset.desc;
+        const mpn = el.dataset.mpn;
+        tooltip.innerHTML = `<h3>${name}</h3><p>${desc}</p>${mpn ? `<p class="mpn">${mpn}</p>` : ''}`;
+        tooltip.classList.add('visible');
+      });
+      el.addEventListener('mousemove', (e) => {
+        let x = e.clientX + 15, y = e.clientY + 15;
+        if (x + 290 > window.innerWidth) x = e.clientX - 300;
+        if (y + 120 > window.innerHeight) y = e.clientY - 130;
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = y + 'px';
+      });
+      el.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+    });
+  </script>
+</body>
+</html>

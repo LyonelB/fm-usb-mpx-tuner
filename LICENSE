@@ -1,0 +1,28 @@
+CERN Open Hardware Licence Version 2 - Strongly Reciprocal (CERN-OHL-S)
+
+Copyright (C) 2026 Lyonel Bernard <lyonel.bernard@gmail.com>
+
+This source describes Open Hardware and is licensed under the CERN-OHL-S v2.
+
+You may redistribute and modify this source and make products using it under
+the terms of the CERN-OHL-S v2 (https://ohwr.org/cern_ohl_s_v2.txt).
+
+This source is distributed WITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING
+OF MERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A PARTICULAR PURPOSE.
+Please see the CERN-OHL-S v2 for applicable conditions.
+
+Source location: https://github.com/LyonelB/fm-usb-mpx-tuner
+
+As per CERN-OHL-S v2 section 4, should You produce hardware based on this
+source, You must where practicable maintain the Source Location visible on the
+external case of the hardware or documentation, or as permitted under CERN OHL S
+v2 section 4, on a support or other such visible means.
+
+                         CERN-OHL-S v2
+         CERN Open Hardware Licence Version 2 – Strongly Reciprocal
+
+                               Preamble
+
+CERN has developed this licence to promote collaboration among hardware
+designers and to provide a legal tool which supports the freedom to use, study,
+modify, share and distribute hardware designs and products based on those designs.

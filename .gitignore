@@ -1,0 +1,50 @@
+# KiCad
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_pro-bak
+*-backups/
+fp-info-cache
+*.dsn
+*.ses
+*.net
+*.brd.bak
+_autosave-*
+*.tmp
+
+# KiCad fabrication outputs (keep gerbers in hw/fab/ if committed explicitly)
+*.gbr
+*.drl
+*.pos
+*.rpt
+
+# STM32CubeIDE / CubeMX
+.metadata/
+*.ioc.bak
+Debug/
+Release/
+firmware/**/*.o
+firmware/**/*.d
+firmware/**/*.elf
+firmware/**/*.bin
+firmware/**/*.hex
+firmware/**/*.map
+firmware/**/*.lst
+
+# VS Code / IDE
+.vscode/
+*.code-workspace
+
+# Claude Code internals
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python (scripts d'automation)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
