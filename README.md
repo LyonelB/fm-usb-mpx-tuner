@@ -1,101 +1,144 @@
 # fm-usb-mpx-tuner
 
-Tuner FM USB autonome avec sortie MPX composite et sortie audio stéréo démodulée.
+Tuner FM USB composite pour monitoring broadcast — alimente [fm-monitor](https://github.com/LyonelB/fm-monitor) avec toutes ses sources de données.
 
 ## Présentation
 
-Ce projet est un récepteur FM alimenté par USB, conçu pour les applications broadcast et monitoring.  
-Il expose deux sorties simultanées :
+Périphérique USB composite qui expose **trois canaux simultanés** vers le Raspberry Pi :
 
-- **MPX** — signal composite FM brut (19 kHz pilote, L+R, L−R DSB-SC, RDS) sur RCA (phono), pour alimenter un ADC type HiFiBerry DAC+ ADC ou un analyseur FM broadcast.
-- **Audio stéréo** — L/R démodulés et convertis en analogique via un DAC I²S haute qualité, sur jack 3,5 mm TRS.
+| Interface USB | Type | Contenu | Consommé par |
+|--------------|------|---------|--------------|
+| `/dev/ttyACM0` | CDC série | Signal RF (dBf, SNR, multipath) + groupes RDS | `tef_driver.py` |
+| `hw:Tuner` | USB Audio 48 kHz stéréo | Audio démodulé L/R | `tef_audio_analyzer.py` |
+| `hw:MPX` | USB Audio 192 kHz mono | Signal MPX composite brut | `mpx_analyzer.py` |
 
-Le tout tient dans un boîtier Hammond extrudé **1455L1201** (120 × 55 × 30 mm).
+Sortie analogique de secours : **mini jack 3,5 mm TRS** (audio stéréo via DAC I²S).
 
 ## Architecture
 
 ```
-Antenne FM
-    │
-    ▼
-┌──────────────┐    I²C/SPI    ┌─────────────────┐
-│  TEF6687 V205│ ◄────────────►│  STM32F072CBT6  │◄──── USB (Type-C)
-│  (tuner IC)  │               │  (USB Audio/CDC) │
-└──────┬───────┘               └─────────────────┘
-       │                                │
-       │ MPX composite                  │ I²S
-       ▼                                ▼
-┌─────────────┐               ┌──────────────────┐
-│  TLV9062    │               │    PCM5102A      │
-│  (buffer)   │               │    (I²S DAC)     │
-└──────┬──────┘               └────────┬─────────┘
-       │                               │
-       ▼                               ▼
-   RCA (phono)                  Jack 3,5 mm stéréo
-  (MPX ~1 Vrms)                 (audio L/R)
+Antenne FM (SMA)
+      │
+      ▼
+┌──────────────────┐  I²C   ┌─────────────────────────────────────┐
+│  TEF6687HN/V205  │◄──────►│          STM32F072CBU6              │
+│  (tuner FM/AM)   │        │                                     │
+│                  │  I²S   │  SPI1/I²S slave ──► USB Audio 0    ├──► hw:Tuner
+│  Audio 48 kHz   ─┼───────►│  stéréo 16 bit / 48 kHz            │    (fm-monitor)
+│                  │        │                                     │
+│  MPX (analog)   ─┼──┐     │  SPI2/I²S master ◄─ PCM1863       │
+│                  │  │     │  mono 24 bit / 192 kHz ──► USB Audio 1 ├──► hw:MPX
+│  crystal         │  │     │                                     │    (fm-monitor)
+│  55.46667 MHz    │  │     │  CDC (XDR-GTK protocol) ───────────├──► /dev/ttyACM0
+└──────────────────┘  │     │                                     │    (fm-monitor)
+                      │     │  I²S ──────────────────────────────┼──► PCM5102A
+                      │     └─────────────────────────────────────┘         │
+                      │                                                      ▼
+                      │      TLV9062                                  mini jack 3,5 mm
+                      └──────(buffer)──────────────────► PCM1863
+                                                         (ADC 192 kHz)
 ```
 
 ## Composants principaux
 
-| Référence | Composant | Description |
-|-----------|-----------|-------------|
-| U1 | TEF6687 V205 | Tuner FM/AM Silicon Labs, sortie MPX + I²S |
-| U2 | STM32F072CBT6 | MCU ARM Cortex-M0, USB Full-Speed natif |
-| U3 | PCM5102A | DAC I²S stéréo 32 bits, 112 dB SNR |
-| U4 | TLV9062 | Op-amp rail-to-rail, buffer sortie MPX |
-| U5 | AMS1117-3.3 | LDO 3,3 V / 1 A (alim. USB 5 V → 3,3 V) |
-| X1 | 8 MHz crystal | Horloge STM32 |
-| J1 | USB Type-C | Alimentation + données USB 2.0 FS |
-| J2 | SMA femelle | Entrée antenne 50 Ω |
-| J3 | RCA femelle | Sortie MPX (~1 Vrms line-level, couplage AC) |
-| J4 | Jack 3,5 mm TRS | Sortie audio stéréo |
-| — | Hammond 1455L1201 | Boîtier extrudé aluminium 120×55×30 mm |
+| Ref | Composant | Rôle |
+|-----|-----------|------|
+| U1 | TEF6687HN/V205 | Tuner FM/AM — MPX + I²S + RDS natif |
+| U2 | STM32F072CBU6 | MCU Cortex-M0, USB FS natif (HSI48+CRS) |
+| U3 | PCM5102A | DAC I²S → mini jack 3,5 mm (audio analogique) |
+| U4 | TLV9062 | Buffer MPX (TEF6687 → PCM1863, impédance) |
+| U5 | PCM1863 | ADC MPX 192 kHz / 24 bit → USB Audio `hw:MPX` |
+| U6 | TPS7A2033 | LDO 3,3 V ultra low-noise (RF + audio) |
+| D1 | USBLC6-2P6 | Protection ESD lignes USB |
+| X1 | 8 MHz | Résonateur STM32F072 |
+| X2 | 55,46667 MHz | Crystal TEF6687 (référence RF) |
+| FL1 | ACM2012-202-2P | Filtre mode commun USB |
+| J1 | USB-C | Alimentation 5 V + données USB 2.0 FS |
+| J2 | SMA femelle | Entrée antenne FM 50 Ω |
+| J3 | Mini jack 3,5 mm TRS | Sortie audio analogique stéréo |
 
-Voir la [BOM complète](docs/bom.csv) pour références Mouser/LCSC et quantités.
+Voir la [BOM complète](docs/bom.csv) pour références LCSC/Mouser et prix.
+
+## Compatibilité fm-monitor
+
+Le firmware implémente le protocole **XDR-GTK** sur le port CDC — identique au firmware [FM-DX-Tuner](https://github.com/kkonradpl/FM-DX-Tuner).  
+`tef_driver.py` fonctionne sans modification.
+
+Le flux MPX USB (`hw:MPX`, 192 kHz) remplace le RTL-SDR comme source de `mpx_analyzer.py` :
+
+```python
+# config.json — section tef
+{
+  "tef": {
+    "enabled": true,
+    "serial_port": "/dev/ttyACM0",
+    "alsa_device": "hw:Tuner",
+    "mpx_device":  "hw:MPX",        # nouveau — MPX 192 kHz
+    "mpx_sample_rate": 192000
+  }
+}
+```
+
+Métriques disponibles avec cette carte :
+
+| Métrique | Disponible |
+|----------|-----------|
+| Signal dBf + SNR RF | ✅ (CDC) |
+| PI Code, PS, RT, MS | ✅ (CDC) |
+| Niveaux L/R audio | ✅ (hw:Tuner) |
+| Déviation FM ±75 kHz | ✅ (hw:MPX) |
+| Pilote 19 kHz | ✅ (hw:MPX) |
+| Stéréo 38 kHz | ✅ (hw:MPX) |
+| RDS RF 57 kHz | ✅ (hw:MPX) |
+| SNR audio | ✅ (hw:MPX) |
 
 ## Structure du dépôt
 
 ```
 fm-usb-mpx-tuner/
 ├── docs/
-│   ├── architecture.md     # Description détaillée de l'architecture
-│   ├── bom.csv             # Bill of Materials
-│   └── schematic.svg       # Schéma de principe (interactif HTML : schematic.html)
+│   ├── architecture.md     # Description détaillée
+│   ├── bom.csv             # Bill of Materials complet
+│   └── schematic.html      # Schéma interactif
 ├── firmware/
-│   ├── README.md           # Build & flash instructions
-│   └── src/                # Sources STM32 (STM32CubeIDE / Makefile)
+│   ├── README.md           # Build, flash, DFU
+│   └── src/                # Sources STM32 (STM32CubeIDE)
 ├── hardware/
-│   ├── schematic/          # Fichiers KiCad (.kicad_sch)
-│   ├── pcb/                # Layout PCB KiCad (.kicad_pcb)
-│   └── fab/                # Gerbers, drill, BOM pick-and-place
+│   ├── schematic/          # KiCad .kicad_sch
+│   ├── pcb/                # Layout PCB .kicad_pcb
+│   └── fab/                # Gerbers, positions, BOM JLCPCB
 ├── .gitignore
 ├── LICENSE                 # CERN-OHL-S v2
 └── README.md
 ```
 
-## Mise en route rapide
+## Mise en route
 
-### Matériel requis
-- Câble USB-C
-- Antenne FM 50 Ω (dipôle, fouet ou SMA→MCX)
-- ADC line-in (ex. HiFiBerry DAC+ ADC) via câble RCA→jack 3,5 mm pour analyse FM
-- Ou jack audio 3,5 mm pour écoute démodulée
+### Branchement
 
-### Firmware
+```
+Antenne FM ──SMA──► fm-usb-mpx-tuner ──USB-C──► Raspberry Pi
+                                       │
+                                       └─mini jack──► ampli / casque (optionnel)
+```
+
+### Détection sur le Raspberry Pi
+
 ```bash
-cd firmware
-# avec STM32CubeIDE : importer le projet, Build & Flash
-# ou avec make :
-make flash TARGET=fm-usb-mpx-tuner INTERFACE=stlink
+ls /dev/ttyACM0          # port CDC série
+aplay -l | grep Tuner    # interface audio 48 kHz
+aplay -l | grep MPX      # interface audio 192 kHz
 ```
 
-### Contrôle USB
-Le STM32 expose un CDC série virtuel. Protocole simple :
-```
-TUNE 98.2        # accorder à 98,2 MHz
-RSSI             # lire le niveau du signal
-VOL 80           # volume DAC (0–100)
-MPX ON/OFF       # activer/désactiver la sortie MPX
+### Firmware — flash initial
+
+```bash
+# Mode DFU : relier BOOT0 à 3,3 V, brancher USB, flasher
+dfu-util -a 0 -s 0x08000000:leave -D build/fm-usb-mpx-tuner.bin
+
+# Via ST-LINK (SWD)
+openocd -f interface/stlink.cfg -f target/stm32f0x.cfg \
+        -c "program build/fm-usb-mpx-tuner.hex verify reset exit"
 ```
 
 ## Licence

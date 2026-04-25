@@ -1,26 +1,36 @@
 Reference,Value,Description,Package,Qty,Manufacturer,MPN,LCSC,Mouser,Unit Price EUR
-U1,TEF6687 V205,Tuner FM/AM Silicon Labs module ou IC,QFN-32 / module,1,NXP / module aftermarket,TEF6687HN/V205,—,—,~8.00
-U2,STM32F072CBT6,MCU ARM Cortex-M0 48 MHz USB FS,LQFP-48,1,STMicroelectronics,STM32F072CBT6,C81720,581-STM32F072CBT6,~3.50
-U3,PCM5102A,DAC I2S stéréo 32-bit 112 dB SNR,TSSOP-20,1,Texas Instruments,PCM5102APWR,C9768,595-PCM5102APWR,~2.80
-U4,TLV9062,Op-amp rail-to-rail 10 MHz GBW,SOT-23-8,1,Texas Instruments,TLV9062IDCK,C132345,595-TLV9062IDCKT,~0.60
-U5,AMS1117-3.3,LDO 3.3 V 1 A,SOT-223,1,Advanced Monolithic Systems,AMS1117-3.3,C6186,522-AMS1117-3.3,~0.20
-X1,8 MHz,Crystal SMD 8 MHz 20 ppm,3225 (3.2×2.5 mm),1,Abracon,ABM3-8.000MHZ-D2Y-T,C16152,815-ABM38.000MHZ-D2Y,~0.40
-J1,USB-C,Connecteur USB Type-C femelle SMD,USB-C Mid-Mount,1,HRO,TYPE-C-31-M-12,C165948,—,~0.30
-J2,SMA-F,Connecteur SMA femelle 50 Ω PCB edge,SMA Edge Mount,1,Amphenol,901-10511,C77963,523-901-10511,~1.20
-J3,RCA-F,Connecteur RCA femelle PCB mount (phono) — sortie MPX line-level,Through-hole,1,Cliff Electronics,CL1384,—,490-CL1384,~0.80
-J4,AUDIO-3.5,Jack 3.5 mm TRS stéréo SMD,PJ-320A,1,CUI Devices,SJ-3523-SMT-TR,C91855,490-SJ-3523-SMT,~0.50
-C1–C4,100 nF,Découplage céramique X5R 3.3 V,0402,4,YAGEO,CC0402KRX5R8BB104,—,—,~0.02
-C5–C8,10 µF,Filtrage alim. céramique X5R 6.3 V,0805,4,SAMSUNG,CL21A106KOQNNNE,C15850,—,~0.10
-C9–C10,22 pF,Charge crystal,0402,2,YAGEO,CC0402JRNPO9BN220,—,—,~0.02
-C11–C12,47 µF,Bulk alim. électrochimique 10 V,SMD D6.3,2,Panasonic,EEE-1AA470P,—,667-EEE1AA470P,~0.30
-R1–R4,10 kΩ,Pull-up I2C / GPIO,0402,4,YAGEO,RC0402FR-0710KL,—,—,~0.02
-R5–R6,33 Ω,Série USB D+/D-,0402,2,YAGEO,RC0402FR-0733RL,—,—,~0.02
-R7,100 Ω,Série sortie MPX RCA (protection câble capacitif),0402,1,YAGEO,RC0402FR-07100RL,—,—,~0.02
-C13,10 µF,Couplage AC sortie MPX (bloque le DC offset),0805 X5R,1,SAMSUNG,CL21A106KOQNNNE,C15850,—,~0.10
-R8–R9,10 kΩ,Diviseur gain TLV9062,0402,2,YAGEO,RC0402FR-0710KL,—,—,~0.02
-R10,22 kΩ,Résistance gain TLV9062,0402,1,YAGEO,RC0402FR-0722KL,—,—,~0.02
-L1,600 Ω @ 100 MHz,Ferrite bead alim. analogique,0402,1,MURATA,BLM15AG601SN1D,C1015,—,~0.10
-LED1,LED rouge,LED statut 3 mm ou 0402 SMD,3mm / 0402,1,Kingbright,APT3216EC,—,—,~0.10
-—,Hammond 1455L1201,Boîtier extrudé aluminium 120×55×30 mm,—,1,Hammond Mfg,1455L1201,—,546-1455L1201,~8.50
-—,PCB,Double couche FR4 1.6 mm 112×48 mm,—,1,JLCPCB / PCBWay,—,—,—,~5.00
-,,,,,,,,Total estimé EUR,~34.00
+U1,TEF6687HN/V205,Tuner FM/AM NXP — sortie MPX analogique + I²S 48kHz + RDS natif,QFN-32,1,NXP,TEF6687HN/V205,—,—,~8.00
+U2,STM32F072CBU6,MCU ARM Cortex-M0 48MHz USB FS (HSI48+CRS) — 2× SPI/I²S,QFN-48,1,STMicroelectronics,STM32F072CBU6TR,—,511-STM32F072CBU6TR,~3.50
+U3,PCM5102A,DAC I²S stéréo 32-bit 112dB SNR — sortie mini jack,TSSOP-20,1,Texas Instruments,PCM5102APWR,C9768,595-PCM5102APWR,~2.80
+U4,TLV9062,Op-amp rail-to-rail GBW 10MHz — buffer MPX vers PCM1863,SOT-23-8,1,Texas Instruments,TLV9062IDCK,C132345,595-TLV9062IDCKT,~0.60
+U5,PCM1863,ADC stéréo 24-bit 192kHz I²S — numérise le MPX pour USB,TSSOP-24,1,Texas Instruments,PCM1863DBTR,C2678057,595-PCM1863DBTR,~3.50
+U6,TPS7A2033PDBVR,LDO 3.3V 200mA ultra low-noise (9µVrms) — alim. analogique RF+audio,SOT-23-5,1,Texas Instruments,TPS7A2033PDBVR,C784566,595-TPS7A2033PDBVR,~1.20
+U7,AMS1117-3.3,LDO 3.3V 1A — alim. numérique STM32 + logique,SOT-223,1,Advanced Monolithic Systems,AMS1117-3.3,C6186,522-AMS1117-3.3,~0.20
+D1,USBLC6-2P6,TVS USB ESD protection bidirectionnelle,SOT-23-6,1,STMicroelectronics,USBLC6-2P6,C7519,511-USBLC6-2P6,~0.30
+D2,BAV99S,Diode dual série — protection RF entrée antenne,SOT-363,1,Vishay,BAV99S-E3-18,—,781-BAV99SE3-18,~0.15
+D3,LED verte,LED statut signal — 0402 SMD,0402,1,Würth,150040VS75000,C72043,710-150040VS75000,~0.05
+D4,LED rouge,LED statut alarme — 0402 SMD,0402,1,Würth,150040RS75000,C72041,710-150040RS75000,~0.05
+FL1,ACM2012-202-2P-T002,Filtre mode commun USB — atténue EMI sur D+/D−,0805 2-line,1,TDK,ACM2012-202-2P-T002,C95685,810-ACM2012-202-2P-T,~0.40
+X1,8 MHz,Résonateur céramique SMD STM32 — 8MHz 0.5%,3225,1,Murata,CSTCE8M00G55Z99,C252001,81-CSTCE8M00G55-Z99,~0.40
+X2,55.46667 MHz,Crystal TEF6687 référence RF — NP0 0805 load 12pF,HC-49/SMD,1,Abracon,ABM3-55.4667MHZ-D2Y-T,—,—,~1.20
+J1,USB-C,Connecteur USB Type-C femelle mid-mount — données + alim.,USB-C Mid-Mount,1,HRO,TYPE-C-31-M-12,C165948,—,~0.30
+J2,SMA-F,Connecteur SMA femelle PCB edge — entrée antenne 50Ω FM/AM,SMA Edge Mount,1,Amphenol,901-10511,C77963,523-901-10511,~1.20
+J3,AUDIO-3.5,Jack 3.5mm TRS stéréo SMD — sortie audio analogique mini jack,PJ-320A,1,CUI Devices,SJ-3523-SMT-TR,C91855,490-SJ-3523-SMT,~0.50
+FB1–FB4,600Ω@100MHz,Ferrite bead alim. — isolation numérique/analogique,0402,4,Murata,BLM15AG601SN1D,C1015,81-BLM15AG601SN1D,~0.10
+C1–C6,100 nF,Découplage céramique X7R — VDD STM32 + PCM1863 + TPS7A,0402,6,YAGEO,CC0402KRX7R8BB104,—,—,~0.02
+C7–C10,1 µF,Découplage céramique X5R 6.3V — découp. fine,0402,4,YAGEO,CC0402KRX5R8BB105,—,—,~0.03
+C11–C12,10 µF,Filtrage alim. céramique X5R 6.3V — bulk,0805,2,Samsung,CL21A106KOQNNNE,C15850,—,~0.10
+C13–C14,47 µF,Bulk alim. sortie LDO,SMD D6.3,2,Panasonic,EEE-1AA470P,—,667-EEE1AA470P,~0.30
+C15–C16,12 pF,Charge crystal X2 (55.46667 MHz) — NP0 C0G,0402,2,YAGEO,CC0402JRNPO9BN120,—,—,~0.02
+C17,10 µF,Couplage AC entrée MPX — bloque offset DC TEF6687,0805 X5R,1,Samsung,CL21A106KOQNNNE,C15850,—,~0.10
+C18–C19,10 µF,Découplage AVDD PCM5102A et PCM1863,0805 X5R,2,Samsung,CL21A106KOQNNNE,C15850,—,~0.10
+R1–R2,5,1 kΩ,Résistances CC USB-C (détection hôte),0402,2,YAGEO,RC0402FR-075K1L,—,—,~0.02
+R3–R4,10 kΩ,Pull-up I²C (SDA/SCL TEF6687 — PCM1863),0402,2,YAGEO,RC0402FR-0710KL,—,—,~0.02
+R5–R6,100 Ω,Série D+/D− USB (protection + impédance),0402,2,YAGEO,RC0402FR-07100RL,—,—,~0.02
+R7,100 Ω,Série sortie TLV9062 → PCM1863 (protection câble capacitif),0402,1,YAGEO,RC0402FR-07100RL,—,—,~0.02
+R8,100 kΩ,Gain TLV9062 — R feedback (gain ≈ 1 / buffer unitaire),0402,1,YAGEO,RC0402FR-07100KL,—,—,~0.02
+R9,100 kΩ,Gain TLV9062 — R- (buffer unitaire),0402,1,YAGEO,RC0402FR-07100KL,—,—,~0.02
+R10–R11,2 kΩ,Diviseur LED statut,0402,2,YAGEO,RC0402FR-072KL,—,—,~0.02
+—,Hammond 1455L1201,Boîtier extrudé aluminium anodisé 120×55×30mm,—,1,Hammond Mfg,1455L1201,—,546-1455L1201,~8.50
+—,PCB,Double couche FR4 1.6mm 112×48mm — ENIG recommandé,—,1,JLCPCB / PCBWay,—,—,—,~5.00
+,,,,,,,,Total estimé EUR,~38.00
