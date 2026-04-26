@@ -415,7 +415,6 @@ def power_sym(lib_id, ref, x, y):
 
 def net_label(name, x, y, angle=0):
     return f'''
-  (net_tie_pad_groups "")
   (label "{name}"
     (at {x} {y} {angle})
     (fields_autoplaced yes)
